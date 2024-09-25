@@ -49,7 +49,7 @@ build_deps() {
   done
   cd ..
   
-  mkdir -p "ares-deps-$os-$arch-$config"
+  mkdir -p "ares-deps"
   for dependency in "${dependencies[@]}"
   do
     # install the dependency
@@ -57,6 +57,7 @@ build_deps() {
     $install_func
   done
   cd ..
+  echo "artifactName=ares-deps-$os-$arch" >> $GITHUB_OUTPUT
 }
 
 check_os() {
@@ -71,7 +72,10 @@ check_architecture() {
   if [ "$(uname)" == "Darwin" ]; then
     eval "$1='universal'"
   else
-    eval "$1='todo'"
+    local unametest=$(uname -a)
+    echo $unametest
+    local unameout=$(uname -p)
+    eval "$1=$unameout"
   fi
 }
 
