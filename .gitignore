@@ -1,6 +1,7 @@
 /*
 
 !/.gitignore
+!/.github
 !/build_deps.sh
 !/deps.macos
 !/deps.windows

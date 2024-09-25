@@ -1,0 +1,137 @@
+name: Build
+on:
+  push
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        program:
+        - ares-deps
+        platform:
+        - name: windows-x64
+          os: windows-latest
+          compiler: clang++
+          windres: windres
+          shell: 'msys2 {0}'
+          msystem: clang64
+          install: mingw-w64-clang-x86_64-clang
+        - name: windows-arm64
+          os: windows-latest
+          compiler: clang++ --target=aarch64-w64-windows-gnu --sysroot=/clangarm64 -resource-dir=/clangarm64/lib/clang/$(basename "$(clang++ -print-resource-dir)")
+          windres: windres --target=aarch64-w64-windows-gnu
+          shell: 'msys2 {0}'
+          msystem: clang64
+          install: mingw-w64-clang-x86_64-clang mingw-w64-clang-aarch64-clang
+        - name: macos-universal
+          os: macos-latest
+          compiler: clang++
+          shell: sh
+    name: ${{ matrix.program }}-${{ matrix.platform.name }}
+    runs-on: ${{ matrix.platform.os }}
+    defaults:
+      run:
+        shell: ${{ matrix.platform.shell }}
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Install MSYS2 Dependencies
+      if: matrix.platform.shell == 'msys2 {0}'
+      uses: msys2/setup-msys2@v2
+      with:
+        msystem: ${{ matrix.platform.msystem }}
+        install: make ${{ matrix.platform.install }}
+    - name: Install Windows Dependencies
+      if: runner.os == 'Windows'
+      run: |
+        export PATH="/c/Users/runneradmin/.cargo/bin:$PATH" # correct on windows-latest as of 2024-02-19
+        if [[ ${{ matrix.platform.name }} == *-arm64 ]]; then
+          rustup toolchain install nightly
+          rustup default nightly
+          rustup target add aarch64-pc-windows-msvc
+        else
+          rustup toolchain install nightly
+          rustup default nightly
+        fi
+    - name: Install macOS Dependencies
+      if: runner.os == 'macOS'
+      run: |
+        brew install ninja cmake
+        rustup toolchain install nightly
+        rustup default nightly
+        rustup target add x86_64-apple-darwin
+        rustup target add aarch64-apple-darwin
+    - name: Set up MSVC environment
+      if: matrix.platform.msvc-arch != ''
+      uses: ilammy/msvc-dev-cmd@v1
+      with:
+        arch: ${{ matrix.platform.msvc-arch }}
+    - name: Build ares-deps
+      id: actually-build
+      shell: bash
+      working-directory: ${{ github.workspace }}
+      run: |
+        ./build_deps.sh debug
+    - name: Publish Build Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ matrix.platform.name }}
+        path: ${{ github.workspace }}/ares-deps
+  make-release:
+    name: Create and upload release
+    permissions:
+      contents: write
+    runs-on: ubuntu-22.04
+    if: github.event_name == 'push'
+    needs: [build]
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Get Metadata
+        id: metadata
+        run: |
+          : Get Metadata
+          echo "version=${GITHUB_REF_NAME}" >> $GITHUB_OUTPUT
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        
+      - name: Package Dependencies
+        run: |
+          : Package Dependencies
+          shopt -s extglob
+          
+          for dir in */; do
+              dir_name="${dir%/}"
+              tar -cvJf "${dir_name}.tar.xz" "$dir"
+              echo "Created archive: ${dir_name}.tar.xz"
+          done
+          ls
+          ls ${{ github.workspace }}/*
+
+      - name: Generate Checksums
+        run: |
+          : Generate Checksums
+          shopt -s extglob
+          echo "### Checksums" > ${{ github.workspace }}/CHECKSUMS.txt
+          for file in ${{ github.workspace }}/@(*.tar.xz|*.zip); do
+            echo "    ${file##*/}: $(sha256sum "${file}" | cut -d " " -f 1)" >> ${{ github.workspace }}/CHECKSUMS.txt
+          done
+          ls
+          ls ${{ github.workspace }}/*
+
+      - name: Create Release
+        id: create_release
+        uses: softprops/action-gh-release@9d7c94cfd0a1f3ed45544c887983e9fa900f0564
+        with:
+          draft: false
+          prerelease: false
+          tag_name: ${{ steps.metadata.outputs.version }}
+          name: ares Dependencies, Build ${{ steps.metadata.outputs.version }}
+          body_path: ${{ github.workspace }}/CHECKSUMS.txt
+          files: |
+            ${{ github.workspace }}/windows-x64*.*
+            ${{ github.workspace }}/windows-arm64*.*
+            ${{ github.workspace }}/macos-universal*.*
+       

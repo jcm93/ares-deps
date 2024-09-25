@@ -28,9 +28,9 @@ moltenvk_build() {
 }
 
 moltenvk_install() {
-  ditto "build_temp_$os-$arch-$config"/MoltenVK/Package/${config}/MoltenVK/dynamic/dylib/macOS/libMoltenVK.dylib "ares-deps-$os-$arch-$config"/lib/libMoltenVK.dylib
+  ditto "build_temp_$os-$arch-$config"/MoltenVK/Package/${config}/MoltenVK/dynamic/dylib/macOS/libMoltenVK.dylib ares-deps/lib/libMoltenVK.dylib
   if [[ -f "Package/${config}/MoltenVK/dynamic/dylib/macOS/libMoltenVK.dylib.dSYM" ]]; then
-    ditto "build_temp_$os-$arch-$config"/MoltenVK/Package/${config}/MoltenVK/dynamic/dylib/macOS/libMoltenVK.dylib.dSYM "ares-deps-$os-$arch-$config"/lib/MoltenVK/libMoltenVK.dylib.dSYM
+    ditto "build_temp_$os-$arch-$config"/MoltenVK/Package/${config}/MoltenVK/dynamic/dylib/macOS/libMoltenVK.dylib.dSYM ares-deps/lib/MoltenVK/libMoltenVK.dylib.dSYM
   fi
-  ditto "build_temp_$os-$arch-$config"/MoltenVK/LICENSE "ares-deps-$os-$arch-$config"/licenses/MoltenVK/LICENSE
+  ditto "build_temp_$os-$arch-$config"/MoltenVK/LICENSE ares-deps/licenses/MoltenVK/LICENSE
 }
