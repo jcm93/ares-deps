@@ -1,5 +1,7 @@
 #!/usr/bin/env sh
 
+set -euo pipefail
+
 build_deps() {
   os=''
   check_os os
@@ -7,23 +9,30 @@ build_deps() {
   arch=''
   check_architecture arch
   
-  # temp
-  config='release'
+  config="${1-release}"
+  check_config $config config
   
   # where are we?
   SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
   
+  # add utils scripts for our platform to this file
+  utils_folder="$SCRIPT_DIR/utils.$os"
+  for util in "$utils_folder"/*
+  do
+    source "$util"
+  done
+  
   # add all dependency script files for our platform to this file
   deps_folder="$SCRIPT_DIR/deps.$os"
   dependencies=()
-  for entry in "$deps_folder"/*
+  for dependency in "$deps_folder"/*
   do
-    source "$entry"
-    dependencies+=("$(basename "$entry")")
+    source "$dependency"
+    dependencies+=("$(basename "$dependency")")
   done
   
-  mkdir build_temp
-  cd build_temp
+  mkdir -p "build_temp_$os-$arch-$config"
+  cd "build_temp_$os-$arch-$config"
   for dependency in "${dependencies[@]}"
   do
     # set up the dependency
@@ -40,7 +49,7 @@ build_deps() {
   done
   cd ..
   
-  mkdir "ares-deps-$os-$arch"
+  mkdir -p "ares-deps-$os-$arch-$config"
   for dependency in "${dependencies[@]}"
   do
     # install the dependency
@@ -66,4 +75,16 @@ check_architecture() {
   fi
 }
 
-build_deps
+check_config() {
+  if [[ $1 == "debug" ]]; then
+    eval "$2='Debug'"
+  elif [[ $1 == 'release' ]]; then
+    eval "$2='RelWithDebInfo"
+  elif [[ $1 == 'optimized' ]]; then
+    eval "$2='MinSizeRel'"
+  else
+    eval "$2='RelWithDebInfo'"
+  fi
+}
+
+build_deps "${@}"

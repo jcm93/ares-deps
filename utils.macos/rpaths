@@ -1,0 +1,6 @@
+fix_rpaths() {
+  local lib="$1"
+  local lib_basename=$(basename ${lib})
+  install_name_tool -id "@rpath/${lib_basename}" "${lib}"
+  echo "Fixed id of ${lib}"
+}

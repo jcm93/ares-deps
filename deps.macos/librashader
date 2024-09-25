@@ -11,6 +11,12 @@ librashader_setup() {
     git -C librashader fetch
   fi
   git -C librashader reset --hard "$librashader_hash"
+  
+  if [[ $config == "Debug" ]]; then
+    librashader_profile='debug'
+  elif [[ $config == "Release" ]]; then
+    librashader_profile='optimized'
+  fi
 }
 
 librashader_clean() {
@@ -30,7 +36,8 @@ librashader_build() {
 }
 
 librashader_install() {
-  ditto build_temp/librashader/include "ares-deps-$os-$arch"/include/librashader
-  ditto build_temp/librashader/target/${librashader_profile}/librashader.dylib "ares-deps-$os-$arch"/lib/librashader.dylib
-  fix_rpaths "ares-deps-$os-$arch"/lib/librashader/librashader.dylib
+  pwd
+  ditto "build_temp_$os-$arch-$config"/librashader/include "ares-deps-$os-$arch-$config"/include/librashader/
+  ditto "build_temp_$os-$arch-$config"/librashader/target/${librashader_profile}/librashader.dylib "ares-deps-$os-$arch-$config"/lib/librashader.dylib
+  fix_rpaths "ares-deps-$os-$arch-$config"/lib/librashader.dylib
 }
