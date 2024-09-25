@@ -1,0 +1,35 @@
+moltenvk_name='MoltenVK'
+moltenvk_version='1.2.9'
+moltenvk_url='https://github.com/KhronosGroup/MoltenVK.git'
+moltenvk_hash='bf097edc74ec3b6dfafdcd5a38d3ce14b11952d6'
+
+moltenvk_setup() {
+  if [ ! -d "MoltenVK" ]; then
+    git clone https://github.com/KhronosGroup/MoltenVK.git
+  else
+    git -C MoltenVK fetch
+  fi
+  git -C MoltenVK reset --hard "$moltenvk_hash"
+}
+
+moltenvk_clean() {
+  echo "Todo"
+}
+
+moltenvk_patch() {
+  echo "No patching to perform"
+}
+
+moltenvk_build() {
+  cd MoltenVK
+  ./fetchDependencies --macos
+  xcodebuild build -quiet -project MoltenVKPackaging.xcodeproj -scheme "MoltenVK Package (macOS only)" -configuration ${config}
+  cd ..
+}
+
+moltenvk_install() {
+  ditto build_temp/MoltenVK/Package/${config}/MoltenVK/dynamic/dylib/macOS/libMoltenVK.dylib "ares-deps-$os-$arch"/lib/libMoltenVK.dylib
+  if [[ -f "Package/${config}/MoltenVK/dynamic/dylib/macOS/libMoltenVK.dylib.dSYM" ]]; then
+    ditto build_temp/MoltenVK/Package/${config}/MoltenVK/dynamic/dylib/macOS/libMoltenVK.dylib.dSYM "ares-deps-$os-$arch"/lib/MoltenVK/libMoltenVK.dylib.dSYM
+  fi
+}

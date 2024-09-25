@@ -1,0 +1,9 @@
+/*
+
+!/.gitignore
+!/build_deps.sh
+!/deps.macos
+!/deps.windows
+!/utils.macos
+!/utils.windows
+!/README.md

@@ -1,0 +1,54 @@
+sdl_name='SDL2'
+sdl_version='2.28.5'
+sdl_url='https://github.com/libsdl-org/SDL.git'
+sdl_hash='15ead9a40d09a1eb9972215cceac2bf29c9b77f6'
+SDLARGS=()
+
+## Build Steps
+sdl_setup() {
+  if [ ! -d "SDL" ]; then
+    git clone https://github.com/libsdl-org/SDL.git
+  else
+    git -C SDL fetch
+  fi
+  git -C SDL reset --hard "$sdl_hash"
+}
+
+sdl_clean() {
+  echo "Todo"
+}
+
+sdl_config() {
+  if [[ "$config" == "RelWithDebInfo" ]]; then
+    CFLAGS='-g'
+  elif [[ "$config" == "Debug" ]]; then
+    CFLAGS='-O0 -g'
+  fi
+}
+
+sdl_build() {
+  SDLARGS=()
+  SDLARGS+=("-DCMAKE_OSX_ARCHITECTURES=arm64;x86_64;")
+
+  cd SDL
+  mkdir -p build
+  pushd build
+  
+  ## dSYMs require the Xcode generator; for reasons, presumably an xcodebuild bug, this does not actually generate a dSYM
+  ## xcodebuild build -project ../Xcode/SDL/SDL.xcodeproj -scheme "Shared Library" -configuration Debug XCODE_ATTRIBUTE_DEBUG_INFORMATION_FORMAT="dwarf-with-dsym"
+
+  cmake .. "${SDLARGS[@]}"
+  cmake --build . --config ${config}
+
+  popd
+  cd ..
+}
+
+sdl_install() {
+  ditto build_temp/SDL/build/libSDL2-2.0.0.dylib "ares-deps-$os-$arch"/lib/libSDL2-2.0.0.dylib
+  mkdir -p "ares-deps-$os-$arch"/include/SDL2
+  ditto build_temp/SDL/include "ares-deps-$os-$arch"/include/SDL2
+}
+
+
+

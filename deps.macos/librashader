@@ -1,0 +1,36 @@
+librashader_name='librashader'
+librashader_version='0.4.5'
+librashader_url='https://github.com/SnowflakePowered/librashader.git'
+librashader_hash='1e0727f89de590a325766855fb1fa35c624fa6c8'
+librashader_profile='release'
+
+librashader_setup() {
+  if [ ! -d "librashader" ]; then
+    git clone https://github.com/SnowflakePowered/librashader.git
+  else
+    git -C librashader fetch
+  fi
+  git -C librashader reset --hard "$librashader_hash"
+}
+
+librashader_clean() {
+  echo "Todo"
+}
+
+librashader_patch() {
+  echo "No patching to perform"
+}
+
+librashader_build() {
+  cd librashader
+  cargo +nightly run -p librashader-build-script -- --profile ${librashader_profile} --target x86_64-apple-darwin
+  cargo +nightly run -p librashader-build-script -- --profile ${librashader_profile} --target aarch64-apple-darwin
+  lipo -create -output target/${librashader_profile}/librashader.dylib target/x86_64-apple-darwin/${librashader_profile}/librashader.dylib target/aarch64-apple-darwin/${librashader_profile}/librashader.dylib
+  cd ..
+}
+
+librashader_install() {
+  ditto build_temp/librashader/include "ares-deps-$os-$arch"/include/librashader
+  ditto build_temp/librashader/target/${librashader_profile}/librashader.dylib "ares-deps-$os-$arch"/lib/librashader.dylib
+  fix_rpaths "ares-deps-$os-$arch"/lib/librashader/librashader.dylib
+}
