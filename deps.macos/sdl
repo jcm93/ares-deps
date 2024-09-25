@@ -52,6 +52,7 @@ sdl_install() {
   ditto "build_temp_$os-$arch-$config"/SDL/build/libSDL2-2.0.0.dylib "ares-deps-$os-$arch-$config"/lib/libSDL2-2.0.0.dylib
   mkdir -p "ares-deps-$os-$arch-$config"/include/SDL2
   ditto "build_temp_$os-$arch-$config"/SDL/include "ares-deps-$os-$arch-$config"/include/SDL2
+  ditto "build_temp_$os-$arch-$config"/SDL/LICENSE.txt "ares-deps-$os-$arch-$config"/licenses/SDL2/LICENSE.txt
 }
 
 

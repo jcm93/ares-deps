@@ -18,4 +18,4 @@ Dependency build functions are provided in a `<dependency>` file in the `deps.ma
 * `<dependency>_install()`: This function should copy build products to the final output directories. The product directory takes the form `ares-deps-$os-$arch-$config` depending on environment and build configuration. Within the build output directory:
   * The `lib` folder should contain all .dylibs or .dlls for the library, as well as all debug symbol files if necessary.
   * The `include/<dependency>/` directory should contain any necessary header files for the library.
-  * Any relevant licenses for the library should be placed in the `licenses/` directory and named appropriately.
+  * Any relevant licenses for the library should be placed in the `licenses/<dependency>` directory and named appropriately.

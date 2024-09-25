@@ -32,4 +32,5 @@ moltenvk_install() {
   if [[ -f "Package/${config}/MoltenVK/dynamic/dylib/macOS/libMoltenVK.dylib.dSYM" ]]; then
     ditto "build_temp_$os-$arch-$config"/MoltenVK/Package/${config}/MoltenVK/dynamic/dylib/macOS/libMoltenVK.dylib.dSYM "ares-deps-$os-$arch-$config"/lib/MoltenVK/libMoltenVK.dylib.dSYM
   fi
+  ditto "build_temp_$os-$arch-$config"/MoltenVK/LICENSE "ares-deps-$os-$arch-$config"/licenses/MoltenVK/LICENSE
 }

@@ -40,4 +40,6 @@ librashader_install() {
   ditto "build_temp_$os-$arch-$config"/librashader/include "ares-deps-$os-$arch-$config"/include/librashader/
   ditto "build_temp_$os-$arch-$config"/librashader/target/${librashader_profile}/librashader.dylib "ares-deps-$os-$arch-$config"/lib/librashader.dylib
   fix_rpaths "ares-deps-$os-$arch-$config"/lib/librashader.dylib
+  ditto "build_temp_$os-$arch-$config"/librashader/LICENSE.md "ares-deps-$os-$arch-$config"/licenses/librashader/LICENSE.md
+  ditto "build_temp_$os-$arch-$config"/librashader/LICENSE-GPL.md "ares-deps-$os-$arch-$config"/licenses/librashader/LICENSE-GPL.md
 }
