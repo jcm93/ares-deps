@@ -75,7 +75,7 @@ jobs:
     - name: Publish Build Artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ matrix.platform.name }}
+        name: ares-deps-${{ matrix.platform.name }}
         path: ${{ github.workspace }}/ares-deps
   make-release:
     name: Create and upload release
