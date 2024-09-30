@@ -75,7 +75,7 @@ jobs:
     - name: Publish Build Artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ matrix.platform.name }}
+        name: ares-deps-${{ matrix.platform.name }}
         path: ${{ github.workspace }}/ares-deps
   make-release:
     name: Create and upload release
@@ -104,8 +104,8 @@ jobs:
           
           for dir in */; do
               dir_name="${dir%/}"
-              tar -cvJf "ares-deps-${dir_name}.tar.xz" "$dir"
-              echo "Created archive: ares-deps-${dir_name}.tar.xz"
+              tar -cvJf "${dir_name}.tar.xz" "$dir"
+              echo "Created archive: ${dir_name}.tar.xz"
           done
           ls
           ls ${{ github.workspace }}/*
