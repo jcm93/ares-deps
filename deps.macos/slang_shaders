@@ -1,0 +1,42 @@
+slang_shaders_name='slang-shaders'
+slang_shaders_version='1.0'
+slang_shaders_url='https://github.com/libretro/slang-shaders.git'
+slang_shaders_hash='ec1b8556388317258376467c1561ecb91a06a466'
+
+## Build Steps
+slang_shaders_setup() {
+  if [ ! -d "slang-shaders" ]; then
+    git clone https://github.com/libretro/slang-shaders.git
+  else
+    git -C slang-shaders fetch
+  fi
+  git -C slang-shaders reset --hard "$slang_shaders_hash"
+}
+
+slang_shaders_clean() {
+  echo "Todo"
+}
+
+slang_shaders_config() {
+  echo "No configuration to perform"
+}
+
+slang_shaders_patch() {
+  echo "No patching to perform"
+}
+
+slang_shaders_build() {
+  cd slang-shaders
+  rm -rf .git
+  rm -f .gitlab-ci.yml
+  rm -f configure
+  rm -f Makefile
+  cd ..
+}
+
+slang_shaders_install() {
+  ditto "build_temp_$os-$arch-$config"/slang-shaders ares-deps/lib/slang-shaders
+}
+
+
+

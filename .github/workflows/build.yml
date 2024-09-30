@@ -104,8 +104,8 @@ jobs:
           
           for dir in */; do
               dir_name="${dir%/}"
-              tar -cvJf "${dir_name}.tar.xz" "$dir"
-              echo "Created archive: ${dir_name}.tar.xz"
+              tar -cvJf "ares-deps-${dir_name}.tar.xz" "$dir"
+              echo "Created archive: ares-deps-${dir_name}.tar.xz"
           done
           ls
           ls ${{ github.workspace }}/*
@@ -131,7 +131,7 @@ jobs:
           name: ares Dependencies, Build ${{ steps.metadata.outputs.version }}
           body_path: ${{ github.workspace }}/CHECKSUMS.txt
           files: |
-            ${{ github.workspace }}/windows-x64*.*
-            ${{ github.workspace }}/windows-arm64*.*
-            ${{ github.workspace }}/macos-universal*.*
+            ${{ github.workspace }}/ares-deps-windows-x64*.*
+            ${{ github.workspace }}/ares-deps-windows-arm64*.*
+            ${{ github.workspace }}/ares-deps-macos-universal*.*
        
