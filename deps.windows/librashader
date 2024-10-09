@@ -41,5 +41,6 @@ librashader_install() {
   cp -R "build_temp_$os-$arch-$config"/librashader/target/${librashader_profile}/librashader.dll ares-deps/lib/librashader.dll
   cp -R "build_temp_$os-$arch-$config"/librashader/target/${librashader_profile}/librashader.dll.exp ares-deps/lib/librashader.dll.exp
   cp -R "build_temp_$os-$arch-$config"/librashader/target/${librashader_profile}/librashader.dll.lib ares-deps/lib/librashader.dll.lib
+  mv ares-deps/lib/librashader.dll.lib ares-deps/lib/librashader.lib
   cp -R "build_temp_$os-$arch-$config"/librashader/target/${librashader_profile}/librashader.pdb ares-deps/lib/librashader.pdb
 }
