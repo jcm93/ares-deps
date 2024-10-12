@@ -70,6 +70,8 @@ jobs:
       id: actually-build
       shell: bash
       working-directory: ${{ github.workspace }}
+      env:
+        envName: ${{ matrix.platform.name }}
       run: |
         ./build_deps.sh debug
     - name: Publish Build Artifacts

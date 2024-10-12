@@ -29,7 +29,12 @@ librashader_patch() {
 
 librashader_build() {
   cd librashader
-  cargo +nightly run -p librashader-build-script -- --profile ${librashader_profile}
+  if [[ $envName = windows-arm64 ]]; then
+    echo "Targeting aarch64..."
+    cargo +nightly run -p librashader-build-script -- --profile ${librashader_profile} --target aarch64-pc-windows-msvc
+  else
+    cargo +nightly run -p librashader-build-script -- --profile ${librashader_profile}
+  fi
   cd ..
 }
 
@@ -37,10 +42,15 @@ librashader_install() {
   mkdir -p ares-deps/include/librashader/
   mkdir -p ares-deps/lib/
   cp -R "build_temp_$os-$arch-$config"/librashader/include/. ares-deps/include/librashader/
-  cp -R "build_temp_$os-$arch-$config"/librashader/target/${librashader_profile}/librashader.d ares-deps/lib/librashader.d
-  cp -R "build_temp_$os-$arch-$config"/librashader/target/${librashader_profile}/librashader.dll ares-deps/lib/librashader.dll
-  cp -R "build_temp_$os-$arch-$config"/librashader/target/${librashader_profile}/librashader.dll.exp ares-deps/lib/librashader.dll.exp
-  cp -R "build_temp_$os-$arch-$config"/librashader/target/${librashader_profile}/librashader.dll.lib ares-deps/lib/librashader.dll.lib
+  if [[ $envName = windows-arm64 ]]; then
+    local targetName="aarch64-pc-windows-msvc"
+  else
+    local targetName=""
+  fi
+  cp -R "build_temp_$os-$arch-$config"/librashader/target/${targetName}/${librashader_profile}/librashader.d ares-deps/lib/librashader.d
+  cp -R "build_temp_$os-$arch-$config"/librashader/target/${targetName}/${librashader_profile}/librashader.dll ares-deps/lib/librashader.dll
+  cp -R "build_temp_$os-$arch-$config"/librashader/target/${targetName}/${librashader_profile}/librashader.dll.exp ares-deps/lib/librashader.dll.exp
+  cp -R "build_temp_$os-$arch-$config"/librashader/target/${targetName}/${librashader_profile}/librashader.dll.lib ares-deps/lib/librashader.dll.lib
   mv ares-deps/lib/librashader.dll.lib ares-deps/lib/librashader.lib
-  cp -R "build_temp_$os-$arch-$config"/librashader/target/${librashader_profile}/librashader.pdb ares-deps/lib/librashader.pdb
+  cp -R "build_temp_$os-$arch-$config"/librashader/target/${targetName}/${librashader_profile}/librashader.pdb ares-deps/lib/librashader.pdb
 }
