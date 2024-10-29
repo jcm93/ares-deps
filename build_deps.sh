@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 set -euo pipefail
 
@@ -24,6 +24,7 @@ build_deps() {
   
   # add all dependency script files for our platform to this file
   deps_folder="$SCRIPT_DIR/deps.$os"
+  echo $deps_folder
   dependencies=()
   for dependency in "$deps_folder"/*
   do
@@ -63,6 +64,8 @@ build_deps() {
 check_os() {
   if [ "$(uname)" == "Darwin" ]; then
     eval "$1='macos'"
+  elif [ "$(uname)" == "Linux" ]; then
+    eval "$1='linux'"
   else
     eval "$1='windows'"
   fi
@@ -70,6 +73,8 @@ check_os() {
 
 check_architecture() {
   if [ "$(uname)" == "Darwin" ]; then
+    eval "$1='universal'"
+  elif [ "$(uname)" == "Linux" ]; then
     eval "$1='universal'"
   else
     local unametest=$(uname -a)
@@ -83,7 +88,7 @@ check_config() {
   if [[ $1 == "debug" ]]; then
     eval "$2='Debug'"
   elif [[ $1 == 'release' ]]; then
-    eval "$2='RelWithDebInfo"
+    eval "$2='RelWithDebInfo'"
   elif [[ $1 == 'optimized' ]]; then
     eval "$2='MinSizeRel'"
   else
