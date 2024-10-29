@@ -1,7 +1,7 @@
 sdl_name='SDL2'
-sdl_version='2.28.5'
+sdl_version='2.30.8'
 sdl_url='https://github.com/libsdl-org/SDL.git'
-sdl_hash='15ead9a40d09a1eb9972215cceac2bf29c9b77f6'
+sdl_hash='79ec168f3c1e2fe27335cb8886439f7ef676fb49'
 SDLARGS=()
 
 ## Build Steps
@@ -42,7 +42,7 @@ sdl_build() {
   ## xcodebuild build -project ../Xcode/SDL/SDL.xcodeproj -scheme "Shared Library" -configuration Debug XCODE_ATTRIBUTE_DEBUG_INFORMATION_FORMAT="dwarf-with-dsym"
 
   cmake .. "${SDLARGS[@]}"
-  cmake --build . --config ${config}
+  cmake --build . --config ${config} -j4
 
   popd
   cd ..
