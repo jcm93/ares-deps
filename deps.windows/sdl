@@ -32,6 +32,11 @@ sdl_patch() {
 
 sdl_build() {
   SDLARGS=()
+  if [[ $envName = windows-arm64 ]]; then
+    SDLARGS+=("-A ARM64")
+  else
+    SDLARGS+=("-A x64")
+  fi
 
   cd SDL
   mkdir -p build
