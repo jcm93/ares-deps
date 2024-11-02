@@ -1,0 +1,62 @@
+sdl_name='SDL2'
+sdl_version='2.30.8'
+sdl_url='https://github.com/libsdl-org/SDL.git'
+sdl_hash='79ec168f3c1e2fe27335cb8886439f7ef676fb49'
+SDLARGS=()
+
+## Build Steps
+sdl_setup() {
+  if [ ! -d "SDL" ]; then
+    git clone https://github.com/libsdl-org/SDL.git
+  else
+    git -C SDL fetch
+  fi
+  git -C SDL reset --hard "$sdl_hash"
+}
+
+sdl_clean() {
+  echo "Todo"
+}
+
+sdl_config() {
+  if [[ "$config" == "RelWithDebInfo" ]]; then
+    CFLAGS='-g'
+  elif [[ "$config" == "Debug" ]]; then
+    CFLAGS='-O0 -g'
+  fi
+}
+
+sdl_patch() {
+  echo "No patching to perform"
+}
+
+sdl_build() {
+  SDLARGS=()
+
+  cd SDL
+  mkdir -p build
+  pushd build
+
+  cmake .. "${SDLARGS[@]}" -G "Visual Studio 17 2022"
+  cmake --build . --config ${config}
+
+  popd
+  cd ..
+}
+
+sdl_install() {
+  mkdir -p ares-deps/lib
+  mkdir -p ares-deps/include/SDL2
+  mkdir -p ares-deps/licenses/SDL2
+  cp -R "build_temp_$os-$arch-$config"/SDL/build/${config}/SDL2.dll ares-deps/lib/SDL2.dll
+  cp -R "build_temp_$os-$arch-$config"/SDL/build/${config}/SDL2.pdb ares-deps/lib/SDL2.pdb
+  cp -R "build_temp_$os-$arch-$config"/SDL/build/${config}/SDL2.exp ares-deps/lib/SDL2.exp
+  cp -R "build_temp_$os-$arch-$config"/SDL/build/${config}/SDL2.lib ares-deps/lib/SDL2.lib
+  mkdir -p ares-deps/include/SDL2
+  cp -R "build_temp_$os-$arch-$config"/SDL/build/include/SDL2/. ares-deps/include/SDL2/
+  cp -R "build_temp_$os-$arch-$config"/SDL/build/include-config-${config}/SDL2/. ares-deps/include/SDL2/
+  cp -R "build_temp_$os-$arch-$config"/SDL/LICENSE.txt ares-deps/licenses/SDL2/LICENSE.txt
+}
+
+
+
