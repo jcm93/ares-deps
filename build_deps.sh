@@ -32,8 +32,8 @@ build_deps() {
     dependencies+=("$(basename "$dependency")")
   done
   
-  mkdir -p "build_temp_$os-$arch-$config"
-  cd "build_temp_$os-$arch-$config"
+  mkdir -p "build_temp"
+  cd "build_temp"
   for dependency in "${dependencies[@]}"
   do
     # set up the dependency

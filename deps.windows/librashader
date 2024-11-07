@@ -41,16 +41,16 @@ librashader_build() {
 librashader_install() {
   mkdir -p ares-deps/include/librashader/
   mkdir -p ares-deps/lib/
-  cp -R "build_temp_$os-$arch-$config"/librashader/include/. ares-deps/include/librashader/
+  cp -R build_temp/librashader/include/. ares-deps/include/librashader/
   if [[ $envName = windows-arm64 ]]; then
     local targetName="aarch64-pc-windows-msvc"
   else
     local targetName=""
   fi
-  cp -R "build_temp_$os-$arch-$config"/librashader/target/${targetName}/${librashader_profile}/librashader.d ares-deps/lib/librashader.d
-  cp -R "build_temp_$os-$arch-$config"/librashader/target/${targetName}/${librashader_profile}/librashader.dll ares-deps/lib/librashader.dll
-  cp -R "build_temp_$os-$arch-$config"/librashader/target/${targetName}/${librashader_profile}/librashader.dll.exp ares-deps/lib/librashader.dll.exp
-  cp -R "build_temp_$os-$arch-$config"/librashader/target/${targetName}/${librashader_profile}/librashader.dll.lib ares-deps/lib/librashader.dll.lib
+  cp -R build_temp/librashader/target/${targetName}/${librashader_profile}/librashader.d ares-deps/lib/librashader.d
+  cp -R build_temp/librashader/target/${targetName}/${librashader_profile}/librashader.dll ares-deps/lib/librashader.dll
+  cp -R build_temp/librashader/target/${targetName}/${librashader_profile}/librashader.dll.exp ares-deps/lib/librashader.dll.exp
+  cp -R build_temp/librashader/target/${targetName}/${librashader_profile}/librashader.dll.lib ares-deps/lib/librashader.dll.lib
   mv ares-deps/lib/librashader.dll.lib ares-deps/lib/librashader.lib
-  cp -R "build_temp_$os-$arch-$config"/librashader/target/${targetName}/${librashader_profile}/librashader.pdb ares-deps/lib/librashader.pdb
+  cp -R build_temp/librashader/target/${targetName}/${librashader_profile}/librashader.pdb ares-deps/lib/librashader.pdb
 }
