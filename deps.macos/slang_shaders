@@ -35,7 +35,7 @@ slang_shaders_build() {
 }
 
 slang_shaders_install() {
-  ditto "build_temp_$os-$arch-$config"/slang-shaders ares-deps/lib/slang-shaders
+  ditto "build_temp_$os-$arch-$config"/slang-shaders ares-deps/share/libretro/shaders/shaders_slang
 }
 
 
