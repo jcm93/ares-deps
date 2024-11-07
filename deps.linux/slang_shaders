@@ -36,5 +36,5 @@ slang_shaders_build() {
 
 slang_shaders_install() {
   mkdir -p ares-deps/share/libretro/shaders/shaders_slang
-  cp -R "build_temp_$os-$arch-$config"/slang-shaders/ ares-deps/share/libretro/shaders/shaders_slang/
+  cp -R build_temp/slang-shaders/ ares-deps/share/libretro/shaders/shaders_slang/
 }

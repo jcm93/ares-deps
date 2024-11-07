@@ -34,7 +34,7 @@ librashader_build() {
 librashader_install() {
   mkdir -p ares-deps/include/librashader/
   mkdir -p ares-deps/licenses/librashader/
-  cp -R "build_temp_$os-$arch-$config"/librashader/include/. ares-deps/include/librashader/
-  cp "build_temp_$os-$arch-$config"/librashader/LICENSE.md ares-deps/licenses/librashader/LICENSE.md
-  cp "build_temp_$os-$arch-$config"/librashader/LICENSE-GPL.md ares-deps/licenses/librashader/LICENSE-GPL.md
+  cp -R build_temp/librashader/include/. ares-deps/include/librashader/
+  cp build_temp/librashader/LICENSE.md ares-deps/licenses/librashader/LICENSE.md
+  cp build_temp/librashader/LICENSE-GPL.md ares-deps/licenses/librashader/LICENSE-GPL.md
 }

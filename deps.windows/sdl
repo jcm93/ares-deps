@@ -53,14 +53,14 @@ sdl_install() {
   mkdir -p ares-deps/lib
   mkdir -p ares-deps/include/SDL2
   mkdir -p ares-deps/licenses/SDL2
-  cp -R "build_temp_$os-$arch-$config"/SDL/build/${config}/SDL2.dll ares-deps/lib/SDL2.dll
-  cp -R "build_temp_$os-$arch-$config"/SDL/build/${config}/SDL2.pdb ares-deps/lib/SDL2.pdb
-  cp -R "build_temp_$os-$arch-$config"/SDL/build/${config}/SDL2.exp ares-deps/lib/SDL2.exp
-  cp -R "build_temp_$os-$arch-$config"/SDL/build/${config}/SDL2.lib ares-deps/lib/SDL2.lib
+  cp -R build_temp/SDL/build/${config}/SDL2.dll ares-deps/lib/SDL2.dll
+  cp -R build_temp/SDL/build/${config}/SDL2.pdb ares-deps/lib/SDL2.pdb
+  cp -R build_temp/SDL/build/${config}/SDL2.exp ares-deps/lib/SDL2.exp
+  cp -R build_temp/SDL/build/${config}/SDL2.lib ares-deps/lib/SDL2.lib
   mkdir -p ares-deps/include/SDL2
-  cp -R "build_temp_$os-$arch-$config"/SDL/build/include/SDL2/. ares-deps/include/SDL2/
-  cp -R "build_temp_$os-$arch-$config"/SDL/build/include-config-${config}/SDL2/. ares-deps/include/SDL2/
-  cp -R "build_temp_$os-$arch-$config"/SDL/LICENSE.txt ares-deps/licenses/SDL2/LICENSE.txt
+  cp -R build_temp/SDL/build/include/SDL2/. ares-deps/include/SDL2/
+  cp -R build_temp/SDL/build/include-config-${config}/SDL2/. ares-deps/include/SDL2/
+  cp -R build_temp/SDL/LICENSE.txt ares-deps/licenses/SDL2/LICENSE.txt
 }
 
 
