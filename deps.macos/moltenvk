@@ -23,14 +23,12 @@ moltenvk_patch() {
 moltenvk_build() {
   cd MoltenVK
   ./fetchDependencies --macos
-  xcodebuild build -quiet -project MoltenVKPackaging.xcodeproj -scheme "MoltenVK Package (macOS only)" -configuration ${config}
+  xcodebuild build -quiet -project MoltenVKPackaging.xcodeproj -scheme "MoltenVK Package (macOS only)" -configuration ${config} GCC_GENERATE_DEBUGGING_SYMBOLS=TRUE DEBUG_INFORMATION_FORMAT="dwarf-with-dsym"
   cd ..
 }
 
 moltenvk_install() {
   ditto build_temp/MoltenVK/Package/Release/MoltenVK/dynamic/dylib/macOS/libMoltenVK.dylib ares-deps/lib/libMoltenVK.dylib
-  if [[ -f "Package/Release/MoltenVK/dynamic/dylib/macOS/libMoltenVK.dylib.dSYM" ]]; then
-    ditto build_temp/MoltenVK/Package/Release/MoltenVK/dynamic/dylib/macOS/libMoltenVK.dylib.dSYM ares-deps/lib/MoltenVK/libMoltenVK.dylib.dSYM
-  fi
+  ditto build_temp/MoltenVK/Package/Release/MoltenVK/dynamic/dylib/macOS/libMoltenVK.dylib.dSYM ares-deps/lib/libMoltenVK.dylib.dSYM
   ditto build_temp/MoltenVK/LICENSE ares-deps/licenses/MoltenVK/LICENSE
 }
