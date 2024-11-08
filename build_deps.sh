@@ -9,8 +9,7 @@ build_deps() {
   arch=''
   check_architecture arch
   
-  config="${1-release}"
-  check_config $config config
+  config="${1-RelWithDebInfo}"
   
   # where are we?
   SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
@@ -81,18 +80,6 @@ check_architecture() {
     echo $unametest
     local unameout=$(uname -p)
     eval "$1=$unameout"
-  fi
-}
-
-check_config() {
-  if [[ $1 == "debug" ]]; then
-    eval "$2='Debug'"
-  elif [[ $1 == 'release' ]]; then
-    eval "$2='RelWithDebInfo'"
-  elif [[ $1 == 'optimized' ]]; then
-    eval "$2='MinSizeRel'"
-  else
-    eval "$2='RelWithDebInfo'"
   fi
 }
 
