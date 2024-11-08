@@ -129,7 +129,7 @@ jobs:
 
       - name: Create Release
         id: create_release
-        if: github.ref_type == 'tag'
+        if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@9d7c94cfd0a1f3ed45544c887983e9fa900f0564
         with:
           draft: false
