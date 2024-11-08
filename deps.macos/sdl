@@ -53,6 +53,7 @@ sdl_install() {
   ditto build_temp/SDL/build.xcarchive/dSYMs/libSDL2.dylib.dSYM ares-deps/lib/libSDL2.dylib.dSYM
   mkdir -p ares-deps/include/SDL2
   ditto build_temp/SDL/build.xcarchive/Products/usr/local/include ares-deps/include/SDL2
+  ditto build_temp/SDL/include/SDL_metal.h build_temp/SDL/include/SDL_locale.h build_temp/SDL/include/SDL_misc.h ares-deps/include/SDL2
   ditto build_temp/SDL/LICENSE.txt ares-deps/licenses/SDL2/LICENSE.txt
 }
 
