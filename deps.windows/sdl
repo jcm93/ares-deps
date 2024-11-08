@@ -42,6 +42,8 @@ sdl_build() {
   mkdir -p build
   pushd build
 
+  echo ${config}
+
   cmake .. "${SDLARGS[@]}" -G "Visual Studio 17 2022"
   cmake --build . --config ${config}
 
