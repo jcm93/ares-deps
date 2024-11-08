@@ -35,23 +35,24 @@ sdl_build() {
   SDLARGS+=("-DCMAKE_OSX_ARCHITECTURES=arm64;x86_64;")
 
   cd SDL
-  mkdir -p build
-  pushd build
   
-  ## dSYMs require the Xcode generator; for reasons, presumably an xcodebuild bug, this does not actually generate a dSYM
-  ## xcodebuild build -project ../Xcode/SDL/SDL.xcodeproj -scheme "Shared Library" -configuration Debug XCODE_ATTRIBUTE_DEBUG_INFORMATION_FORMAT="dwarf-with-dsym"
-
-  cmake .. "${SDLARGS[@]}"
-  cmake --build . --config ${config} -j4
-
-  popd
+  xcodebuild build -project ./Xcode/SDL/SDL.xcodeproj \
+                   -scheme "Shared Library" \
+                   archive \
+                   -configuration $config \
+                   DEBUG_INFORMATION_FORMAT="dwarf-with-dsym" \
+                   -archivePath "$SCRIPT_DIR/build_temp/SDL/build" \
+                   ARCHS="x86_64 arm64" \
+                   ONLY_ACTIVE_ARCH=FALSE \
+                   2>&1 | xcbeautify --renderer github-actions
   cd ..
 }
 
 sdl_install() {
-  ditto build_temp/SDL/build/libSDL2-2.0.0.dylib ares-deps/lib/libSDL2-2.0.0.dylib
+  ditto build_temp/SDL/build.xcarchive/Products/@rpath/libSDL2.dylib ares-deps/lib/libSDL2.dylib
+  ditto build_temp/SDL/build.xcarchive/dSYMs/libSDL2.dylib.dSYM ares-deps/lib/libSDL2.dylib.dSYM
   mkdir -p ares-deps/include/SDL2
-  ditto build_temp/SDL/include ares-deps/include/SDL2
+  ditto build_temp/SDL/build.xcarchive/Products/usr/local/include ares-deps/include/SDL2
   ditto build_temp/SDL/LICENSE.txt ares-deps/licenses/SDL2/LICENSE.txt
 }
 
