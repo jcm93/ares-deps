@@ -2,7 +2,7 @@
 
 ares-deps is a group of build scripts for precompiling and packaging dependencies for [ares](https://github.com/ares-emulator/ares) on macOS and Windows. ares-deps also pre-packages certain non-library resources for Linux.
 
-ares-deps is designed to be pulled in at configure/generation time when building ares, such that any necessary libraries and data can be pulled in for any build configuration, included and linked appropriately, and finally packaged correctly in the app bundle or rundir as appropriate.
+ares-deps is designed to be pulled in at configure/generation time when building ares, such that any necessary libraries and data can be included and linked appropriately, and finally packaged correctly in the app bundle or rundir as appropriate.
 
 ## Running
 
