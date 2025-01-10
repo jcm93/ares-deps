@@ -32,6 +32,8 @@ librashader_build() {
   if [[ $envName = windows-arm64 ]]; then
     echo "Targeting aarch64..."
     cargo +nightly run -p librashader-build-script -- --profile ${librashader_profile} --target aarch64-pc-windows-msvc
+  elif [[ $envName = windows7-x64 ]]; then
+    cargo +nightly run -p librashader-build-script -- --profile ${librashader_profile} --target x86_64-win7-windows-msvc --no-default-features --features=runtime-gl
   else
     cargo +nightly run -p librashader-build-script -- --profile ${librashader_profile}
   fi
@@ -44,6 +46,8 @@ librashader_install() {
   cp -R build_temp/librashader/include/. ares-deps/include/librashader/
   if [[ $envName = windows-arm64 ]]; then
     local targetName="aarch64-pc-windows-msvc"
+  elif [[ $envName = windows-arm64 ]]; then
+    local targetName="x86_64-win7-windows-msvc"
   else
     local targetName=""
   fi
